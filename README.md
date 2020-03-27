@@ -1,1 +1,1 @@
-# uzGame
+# webGame-JS
