@@ -7,7 +7,11 @@
     <title>Tetris Game JS</title>
     <style>
       body {
-        background-color: #647e53;
+        background-image: url(img/bg.jpg);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: #171717;
         width: 100vw;
         height: 100vh;
         display: flex;
@@ -17,24 +21,38 @@
         margin: 0;
       }
       h2 {
-        color: lightyellow;
+        background: gold;
+        background: -webkit-linear-gradient(45deg, #01c9ca 0%, #3886ff 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: bold;
         font-family: monospace;
         font-size: 25px;
       }
 
       #score {
         display: inline-block;
+        background: gold;
+        background: -webkit-linear-gradient(45deg, #01c9ca 0%, #3886ff 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
       }
 
       .score {
-        color: lightyellow;
+        background: gold;
+        background: -webkit-linear-gradient(45deg, #01c9ca 0%, #3886ff 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
         font-size: 25px;
         font-weight: bold;
         font-family: monospace;
+        margin-top: 10px;
       }
       canvas {
-        border: 5px solid lightyellow;
-        border-radius: 10px;
+        border: 10px solid #fff;
       }
       img:nth-child(1) {
         transform: rotate(-25deg);
@@ -55,7 +73,6 @@
       Score :
       <div id="score">0</div>
     </div>
-
     <script src="js/tetrominoes.js"></script>
     <script src="js/script.js"></script>
   </body>

@@ -5,14 +5,14 @@ const scoreElement = document.getElementById("score");
 const ROW = 20;
 const COL = (COLUMN = 10); //column
 const SQ = (squareSize = 20); //squareSize
-const VACANT = "rgb(60, 142, 142)"; //빈칸
+const VACANT = "lightgray"; //빈칸
 
 //draw a square
 function drawSquare(x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x * SQ, y * SQ, SQ, SQ);
 
-  ctx.strokeStyle = "lightyellow";
+  ctx.strokeStyle = "rgba(255, 255, 224, 0.5)";
   ctx.strokeRect(x * SQ, y * SQ, SQ, SQ);
 }
 
@@ -39,11 +39,11 @@ drawBoard();
 //the pieces and their colors
 const PIECES = [
   [Z, "salmon"],
-  [S, "rgb(35, 63, 150)"],
-  [T, "brown"],
-  [O, "rgb(41, 88, 52)"],
-  [L, "rgb(101, 60, 142)"],
-  [I, "rgb(168, 50, 135)"],
+  [S, "rgb(35, 79, 255)"],
+  [T, "rgb(255, 75, 75)"],
+  [O, "rgb(244, 219, 37)"],
+  [L, "rgb(180, 235, 71)"],
+  [I, "rgb(194, 89, 247)"],
   [J, "orange"]
 ];
 
@@ -245,7 +245,7 @@ let gameOver = false;
 function drop() {
   let now = Date.now();
   let delta = now - dropStart;
-  if (delta > 1000) {
+  if (delta > 300) {
     p.moveDown();
     dropStart = Date.now();
   }
