@@ -5,10 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Tetris Game JS</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      body {
+        background-color: #647e53;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+      }
+      h2 {
+        color: lightyellow;
+        font-family: monospace;
+        font-size: 25px;
+      }
+
+      #score {
+        display: inline-block;
+      }
+
+      .score {
+        color: lightyellow;
+        font-size: 25px;
+        font-weight: bold;
+        font-family: monospace;
+      }
+      canvas {
+        border: 5px solid lightyellow;
+        border-radius: 10px;
+      }
+      img:nth-child(1) {
+        transform: rotate(-25deg);
+        margin-right: 10px;
+      }
+      img:nth-child(3) {
+        transform: rotate(25deg);
+        margin-left: 10px;
+      }
+    </style>
   </head>
   <body>
-    <canvas id="tetris" width="200px" height="400px"></canvas>
+    <h2>Tetris Game</h2>
+    <div>
+      <canvas id="tetris" width="200px" height="400px"></canvas>
+    </div>
+    <div class="score">
+      Score :
+      <div id="score">0</div>
+    </div>
 
     <script src="js/tetrominoes.js"></script>
     <script src="js/script.js"></script>

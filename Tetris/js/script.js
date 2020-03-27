@@ -1,17 +1,18 @@
 const cvs = document.getElementById("tetris");
 const ctx = cvs.getContext("2d");
+const scoreElement = document.getElementById("score");
 
 const ROW = 20;
 const COL = (COLUMN = 10); //column
 const SQ = (squareSize = 20); //squareSize
-const VACANT = "WHITE"; //빈칸
+const VACANT = "rgb(60, 142, 142)"; //빈칸
 
 //draw a square
 function drawSquare(x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x * SQ, y * SQ, SQ, SQ);
 
-  ctx.strokeStyle = "BLACK";
+  ctx.strokeStyle = "lightyellow";
   ctx.strokeRect(x * SQ, y * SQ, SQ, SQ);
 }
 
@@ -37,17 +38,21 @@ drawBoard();
 
 //the pieces and their colors
 const PIECES = [
-  [Z, "red"],
-  [S, "green"],
-  [T, "yellow"],
-  [O, "blue"],
-  [L, "purple"],
-  [I, "cyan"],
+  [Z, "salmon"],
+  [S, "rgb(35, 63, 150)"],
+  [T, "brown"],
+  [O, "rgb(41, 88, 52)"],
+  [L, "rgb(101, 60, 142)"],
+  [I, "rgb(168, 50, 135)"],
   [J, "orange"]
 ];
 
-//initate a piece
-let p = new Piece(PIECES[0][0], PIECES[0][1]);
+//generate random pieces
+function randomPiece() {
+  let r = (randomN = Math.floor(Math.random() * PIECES.length)); //0 -> 6
+  return new Piece(PIECES[r][0], PIECES[r][1]);
+}
+let p = randomPiece();
 
 //the Object piece
 function Piece(tetromino, color) {
@@ -59,7 +64,7 @@ function Piece(tetromino, color) {
 
   //we need to control the pieces
   this.x = 3;
-  this.y = 0;
+  this.y = -2;
 }
 
 //fill function
@@ -92,12 +97,14 @@ Piece.prototype.moveDown = function() {
     this.draw();
   } else {
     //we lock the piece and generate a new one
+    this.lock();
+    p = randomPiece();
   }
 };
 
 //move Right the piece
 Piece.prototype.moveRight = function() {
-  if (this.collision(1, 0, this.activeTetromino)) {
+  if (!this.collision(1, 0, this.activeTetromino)) {
     this.undraw();
     this.x++;
     this.draw();
@@ -106,7 +113,7 @@ Piece.prototype.moveRight = function() {
 
 //move Left the piece
 Piece.prototype.moveLeft = function() {
-  if (this.collision(-1, 0, this.activeTetromino)) {
+  if (!this.collision(-1, 0, this.activeTetromino)) {
     this.undraw();
     this.x--;
     this.draw();
@@ -129,13 +136,61 @@ Piece.prototype.rotate = function() {
       kick = 1; //we need to move the piece to the right
     }
   }
-  if (this.collision(0, 0, this.nextPattern)) {
+  if (!this.collision(kick, 0, nextPattern)) {
     this.undraw();
     this.x += kick;
     this.tetrominoN = (this.tetrominoN + 1) % this.tetromino.length; // (0+1)%4 => 1
     this.activeTetromino = this.tetromino[this.tetrominoN];
     this.draw();
   }
+};
+
+let score = 0;
+Piece.prototype.lock = function() {
+  for (r = 0; r < this.activeTetromino.length; r++) {
+    for (c = 0; c < this.activeTetromino.length; c++) {
+      //we skip the vacant squares
+      if (!this.activeTetromino[r][c]) {
+        continue;
+      }
+      //pieces to lock on top = over
+      if (this.y + r < 0) {
+        alert("GAME OVER!");
+        //stop request animation frame
+        gameOver = true;
+        break;
+      }
+      //we lock the piece
+      board[this.y + r][this.x + c] = this.color;
+    }
+  }
+  //remove full rows
+  for (r = 0; r < ROW; r++) {
+    let isRowFull = true;
+    for (c = 0; c < COL; c++) {
+      isRowFull = isRowFull && board[r][c] != VACANT;
+    }
+    if (isRowFull) {
+      // if the row is full
+      // we move down all the rows above it
+      for (y = r; y > 1; y--) {
+        for (c = 0; c < COL; c++) {
+          board[y][c] = board[y - 1][c];
+        }
+      }
+      // the top row board[0][..] ths no row above it
+      for (c = 0; c < COL; c++) {
+        board[0][c] = VACANT;
+      }
+      //incremet the score
+      score += 10;
+    }
+  }
+  //update the board
+  drawBoard();
+
+  //update the score
+  scoreElement.innerHTML = score;
 };
 
 //collision function
@@ -186,6 +241,7 @@ function CONTROL(e) {
 
 //drow the piece every 1sec
 let dropStart = Date.now();
+let gameOver = false;
 function drop() {
   let now = Date.now();
   let delta = now - dropStart;
@@ -193,6 +249,8 @@ function drop() {
     p.moveDown();
     dropStart = Date.now();
   }
-  requestAnimationFrame(drop);
+  if (!gameOver) {
+    requestAnimationFrame(drop);
+  }
 }
 drop();
