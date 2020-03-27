@@ -58,19 +58,141 @@ function Piece(tetromino, color) {
   this.activeTetromino = this.tetromino[this.tetrominoN];
 
   //we need to control the pieces
-  this.x = 0;
+  this.x = 3;
   this.y = 0;
 }
 
-//draw a piece to the board
-Piece.prototype.draw = function() {
+//fill function
+Piece.prototype.fill = function(color) {
   for (r = 0; r < this.activeTetromino.length; r++) {
     for (c = 0; c < this.activeTetromino.length; c++) {
       //we draw only accupied squares
       if (this.activeTetromino[r][c]) {
-        drawSquare(this.x + c, this.y + r, this.color);
+        drawSquare(this.x + c, this.y + r, color);
       }
     }
   }
 };
-p.draw();
+
+//draw a piece to the board
+Piece.prototype.draw = function() {
+  this.fill(this.color);
+};
+
+//undraw a piece
+Piece.prototype.undraw = function() {
+  this.fill(VACANT);
+};
+
+//move Down the piece
+Piece.prototype.moveDown = function() {
+  if (!this.collision(0, 1, this.activeTetromino)) {
+    this.undraw();
+    this.y++;
+    this.draw();
+  } else {
+    //we lock the piece and generate a new one
+  }
+};
+
+//move Right the piece
+Piece.prototype.moveRight = function() {
+  if (this.collision(1, 0, this.activeTetromino)) {
+    this.undraw();
+    this.x++;
+    this.draw();
+  }
+};
+
+//move Left the piece
+Piece.prototype.moveLeft = function() {
+  if (this.collision(-1, 0, this.activeTetromino)) {
+    this.undraw();
+    this.x--;
+    this.draw();
+  }
+};
+
+// rotate the piece
+Piece.prototype.rotate = function() {
+  let nextPattern = this.tetromino[
+    (this.tetrominoN + 1) % this.tetromino.length
+  ];
+  let kick = 0;
+
+  if (this.collision(0, 0, nextPattern)) {
+    if (this.x > COL / 2) {
+      //it's the right wall
+      kick = -1; //we need to move the piece to the left
+    } else {
+      //it's the left wall
+      kick = 1; //we need to move the piece to the right
+    }
+  }
+  if (this.collision(0, 0, this.nextPattern)) {
+    this.undraw();
+    this.x += kick;
+    this.tetrominoN = (this.tetrominoN + 1) % this.tetromino.length; // (0+1)%4 => 1
+    this.activeTetromino = this.tetromino[this.tetrominoN];
+    this.draw();
+  }
+};
+
+//collision function
+Piece.prototype.collision = function(x, y, piece) {
+  for (r = 0; r < piece.length; r++) {
+    for (c = 0; c < piece.length; c++) {
+      // if the square is empty, we skip it
+      if (!piece[r][c]) {
+        continue;
+      }
+      // coordinates of the piece after movement
+      let newX = this.x + c + x;
+      let newY = this.y + r + y;
+
+      // conditions
+      if (newX < 0 || newX >= COL || newY >= ROW) {
+        return true;
+      }
+      // skip newY < 0; board[-1] will crush our game
+      if (newY < 0) {
+        continue;
+      }
+      // check if there is a locked piece alrady in place
+      if (board[newY][newX] != VACANT) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+
+//CONTROL the piece
+document.addEventListener("keydown", CONTROL);
+function CONTROL(e) {
+  if (e.keyCode == 37) {
+    p.moveLeft();
+    dropStart = Date.now();
+  } else if (e.keyCode == 38) {
+    p.rotate();
+    dropStart = Date.now();
+  } else if (e.keyCode == 39) {
+    p.moveRight();
+    dropStart = Date.now();
+  } else if (e.keyCode == 40) {
+    p.moveDown();
+  }
+}
+
+//drow the piece every 1sec
+let dropStart = Date.now();
+function drop() {
+  let now = Date.now();
+  let delta = now - dropStart;
+  if (delta > 1000) {
+    p.moveDown();
+    dropStart = Date.now();
+  }
+  requestAnimationFrame(drop);
+}
+drop();
