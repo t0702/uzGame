@@ -44,13 +44,18 @@ h1 {
   border-radius: 20px 0 0 20px;
   outline: none;
   text-align: center;
+  z-index: 2;
 }
 .bt1:hover{
   background-color: #787e5b;
 }
 .bt2{
   display:none;
-  transition: all .8s;
+  transition: all .3s;
+  z-index: 2;
+}
+.bt2:hover{
+  background-color: #787e5b;
 }
 .score {
   color:rgb(255, 162, 0);
@@ -113,8 +118,12 @@ h1 {
   top: 0;
 }
 @media screen and (max-width: 787px){
+  body{
+    height:100vh;
+  }
   .game{
     max-width:485px;
+    min-height: 620px;
     width:90%;
     height: 80%;
     padding-top:20px;
@@ -148,7 +157,7 @@ h1 {
     height:100vh;
   }
   .game{
-    width: 90vw;
+    width: 90%;
     min-height: 450px;
     height: 100%;
     border-radius: 40px 40px 0 0;
@@ -157,6 +166,6 @@ h1 {
     font-size: 30px;
   }
   .bt2{
-    width: 90vw;
+    width: 90%;
   }
 }
