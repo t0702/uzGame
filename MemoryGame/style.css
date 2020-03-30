@@ -1,0 +1,75 @@
+@import url('https://fonts.googleapis.com/css?family=Acme&display=swap');
+/* font-family: 'Acme', sans-serif; */
+
+h2{
+    font-family: 'Acme', sans-serif;
+}
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.card-wrap{
+    max-width:415px;
+    max-height: 415px;
+    width: 100%;
+    height: 100%;
+}
+
+.card-wrap:after{
+    padding-bottom: 100%;
+}
+.row{
+    text-align: center;
+}
+
+.card{
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-color: #eee;
+    cursor: pointer;
+}
+
+.card:hover{
+    box-shadow: inset 0 0 0 1px red;
+    box-sizing: border-box;
+}
+
+.card.done{
+    cursor: default;
+}
+
+.card.done:hover{
+    cursor: default;
+    box-shadow: none;
+}
+
+.red {
+    background-color: red;
+}
+.green {
+    background-color: green;
+}
+.blue {
+    background-color: blue;
+}
+.orange {
+    background-color: orange;
+}
+.cyan {
+    background-color: cyan;
+}
+.yellow {
+    background-color: yellow;
+}
+.pink {
+    background-color: pink;
+}
+.teal {
+    background-color: teal;
+}
+
+.color-hidden {
+    background-color: #eee;
+}
